@@ -1,0 +1,78 @@
+<% include ../partials/header %>
+
+    <div class="row">
+        <div class="col-md-2">
+        
+           
+        </div>
+        <div class="col-md-8">
+            <div class="thumbnail">
+                <img class="img-responsive" src="<%= item.image %>">
+                <div class="caption-full">
+                    <h4 class="pull-right">$<%=item.price %></h4>
+                    <h4><a><%=item.name%></a></h4>
+                    <p>
+                         <em>Submitted by: <%= item.author.username %>, <%= moment(item.createdAt).fromNow() %></em>
+                    </p>
+                    
+                    <% if(currentUser&&item.author.id.equals(currentUser._id)){ %>
+                    <a class="btn btn-xs btn-warning" href="/items/<%=item._id%>/edit">Edit</a>
+                    <form class="delete-form" action="/items/<%=item._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-xs btn-danger">Delete</button>
+                    </form>
+                    <% } %>
+                    
+                    <p><%= item.description %></p>
+                    
+                </div>
+            </div>
+            
+            <div class="well">
+               <form id="com" action="/items/<%=item._id %>/comments" method="POST">
+                <div class="form-group">
+                    <input class="form-control" type="text" name="comment[text]" placeholder="text">
+                </div>
+               
+               
+                <div class="form-group">
+                    <button class="btn btn-lg btn-primary btn-block">Submit!</button>
+                </div>
+            </form>
+                          <hr>          
+                          <div id="comment-list">
+                    <% item.comments.forEach(function(comment){ %>
+                    <div class="row">
+                        <div class="col-md-12">
+                           <strong> <%= comment.author.username %></strong>
+                            <span class="pull-right"><%= moment(comment.createdAt).fromNow() %></span>
+                             <p>
+                             <%= comment.text %>
+                            </p>
+                            <% if(currentUser&&comment.author.id.equals(currentUser._id)){ %>
+                            <a class="btn btn-xs btn-warning" href="/items/<%=item._id%>/comments/<%=comment._id%>/edit">
+                                Edit
+                            </a>
+                            <form class="delete-form" action="/items/<%=item._id%>/comments/<%=comment._id %>?_method=DELETE" method="POST">
+                                <input type="submit" class="btn btn-xs btn-danger" value="Delete" >
+                            </form>
+                            <% } %>
+                            
+                        </div>
+                    </div>
+                   
+                    <% }) %>
+                
+            </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+        
+           
+        </div>
+    </div>
+    
+    
+
+
+
+<% include ../partials/footer %>
